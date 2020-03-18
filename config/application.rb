@@ -33,5 +33,20 @@ module VisableBank
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    
+    # Set default time zone
+    config.time_zone = 'Berlin'
+
+    # Language option
+    config.i18n.available_locales = [:en, :de]
+    config.i18n.default_locale = :en
+
+    # Create DB schema from sql dump
+    config.active_record.schema_format = :sql
+    # Load custom paths
+    # Rails 5 disabling autoload because not thread safe method
+    # Eager_load_paths
+    config.eager_load_paths << Rails.root.join('lib')
+    config.eager_load_paths << Rails.root.join('app/services')
   end
 end
