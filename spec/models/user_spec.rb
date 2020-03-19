@@ -6,7 +6,7 @@ RSpec.describe User, type: :model do
   let!(:branch) { create(:branch) }
   let!(:user) { create(:user, branch: branch) }
 
-  describe 'accosiation' do
+  describe 'association' do
     context 'when user create profile' do
       before do
         user.profile.save!

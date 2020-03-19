@@ -41,6 +41,13 @@ en:
     attributes:
       user:
         uuid: 'Customer ID'
+      profile:
+        email: 'Email address'
+        first_name: 'First name'
+        last_name: 'Last name'
+        postal_code: 'Postal code'
+        city: 'City'
+        address: 'Address'
     errors:
       messages:
         record_invalid: "%{errors}"
@@ -49,3 +56,13 @@ en:
           attributes:
             uuid:
               taken: 'is allocated to other user, please retry few minutes later.'
+        profile:
+          attributes:
+            email:
+              invalid: 'is incorrect. Please use email address format. For example: john.doe@example.com'
+            first_name:
+              too_long: 'is too long. Please use up to 200 characters'
+            last_name:
+              too_long: 'is too long. Please use up to 200 characters'
+            city:
+              too_long: 'is too long. Please use up to 150 characters'
