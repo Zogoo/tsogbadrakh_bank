@@ -1,6 +1,9 @@
 FactoryBot.define do
   factory :transaction do
-    status { 1 }
-    amount { "" }
+    association :account, strategy: :build
+
+    status { :created }
+    amount { Faker::Number.number(digits: 10) }
+    receiver { create(:account) }
   end
 end

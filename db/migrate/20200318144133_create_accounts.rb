@@ -1,13 +1,14 @@
 class CreateAccounts < ActiveRecord::Migration[6.0]
   def change
     create_table :accounts do |t|
-      t.string :type
-      t.integer :status
-      t.bigint :balance
-      t.integer :interest
-      t.integer :interest_period
+      t.string :kind
+      t.integer :status, default: 0
+      t.string :currency, default: 'usd'
+      t.bigint :balance, default: 0
+      t.integer :interest_rate, default: 0
+      t.integer :interest_period, default: 0
 
-      t.references :user, foreign_key: { on_delete: cascade }
+      t.references :user, foreign_key: { on_delete: :cascade }
 
       t.timestamps
     end

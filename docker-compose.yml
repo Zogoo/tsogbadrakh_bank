@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  sinatra:
+    container_name: bank-service
+    build:
+      context: .
+      dockerfile: bank-ruby.dockerfile
+    env_file:
+      - env.development
+    volumes:
+      - .:/app
+      - bundler-cache:/bundler
+      - bank-uploads:/uploads
+      - bank-tmp:/app/tmp
+      - bank-logs:/app/logs
+    working_dir: /app
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    command: bin/rails s -b0 -p 3000
+  postgres:
+    container_name: bank-db
+    image: postgres:9.6
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: Vai7Ob0jjoom4At3Ahth3aec
+
+volumes:
+  bundler-cache:
+  postgres-data:
+  bank-uploads:
+  bank-tmp:
+  bank-logs:

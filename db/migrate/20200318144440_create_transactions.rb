@@ -3,10 +3,13 @@ class CreateTransactions < ActiveRecord::Migration[6.0]
     create_table :transactions do |t|
       t.integer :status
       t.bigint :amount
+      t.integer :receiver_id
 
-      t.references :user, foreign_key: { on_delete: :cascade }
+      t.references :account, foreign_key: { on_delete: :cascade }
 
       t.timestamps
     end
+
+    add_index :transactions, :receiver_id
   end
 end

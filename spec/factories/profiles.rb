@@ -1,12 +1,13 @@
 FactoryBot.define do
   factory :profile do
-    first_name { "MyString" }
-    middle_name { "MyString" }
-    last_name { "MyString" }
-    birth_date { "2020-03-18" }
-    postal_code { "MyString" }
-    city { "MyString" }
-    address { "MyString" }
-    email { "MyString" }
+    email { Faker::Internet.email }
+    first_name { Faker::Name.first_name }
+    middle_name { Faker::Name.middle_name }
+    last_name { Faker::Name.last_name }
+    birth_date { Faker::Date.birthday(min_age: 18, max_age: 65) }
+    postal_code { Faker::Address.zip_code }
+    city { Faker::Address.city }
+    address { Faker::Address.street_address }
+    is_confirmed { true }
   end
 end

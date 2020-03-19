@@ -4,7 +4,7 @@
 module ErrorHandler
   extend ActiveSupport::Concern
   included do
-    rescue_from BankError::InvalidTransferRequest, with: :respond_for_invalid_transfer
+    rescue_from Bank::Error::InvalidTransferRequest, with: :respond_for_invalid_transfer
     rescue_from ActionController::ParameterMissing, with: :respond_paramer_missing
     rescue_from ActiveRecord::RecordNotFound, with: :respond_resource_not_found
 
