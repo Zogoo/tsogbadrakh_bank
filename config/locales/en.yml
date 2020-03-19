@@ -30,4 +30,22 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    models:
+      branch:
+        one: 'Branch'
+        others: 'Branches'
+      user:
+        one: 'Customer'
+        others: 'Customers'
+    attributes:
+      user:
+        uuid: 'Customer ID'
+    errors:
+      messages:
+        record_invalid: "%{errors}"
+      models:
+        user:
+          attributes:
+            uuid:
+              taken: 'is allocated to other user, please retry few minutes later.'

@@ -6,7 +6,7 @@ RSpec.describe Branch, type: :model do
   describe 'association' do
     let!(:atm) { create(:branch, kind: :virtual) }
 
-    context 'when atm user do one transaction' do
+    context 'when user do transaction from atm' do
       let!(:user) { create(:user, branch: atm) }
       let!(:account_from) { create(:account, user: user) }
       let!(:account_to) { create(:account, user: user) }

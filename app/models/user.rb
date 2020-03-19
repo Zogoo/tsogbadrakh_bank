@@ -8,4 +8,6 @@ class User < ApplicationRecord
 
   enum status: %i[created active suspended blocked deleted]
   enum is_confirmed: { registered: false, confirmed: true }
+
+  validates :uuid, uniqueness: true
 end
