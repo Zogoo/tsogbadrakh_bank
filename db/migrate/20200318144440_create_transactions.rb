@@ -1,6 +1,7 @@
 class CreateTransactions < ActiveRecord::Migration[6.0]
   def change
     create_table :transactions do |t|
+      t.string :type
       t.integer :status
       t.bigint :amount
       t.integer :receiver_id

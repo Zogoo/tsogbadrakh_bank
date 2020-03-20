@@ -22,7 +22,7 @@ FOREIGN KEY ("user_id")
   REFERENCES "users" ("id")
  ON DELETE CASCADE);
 CREATE INDEX "index_accounts_on_user_id" ON "accounts" ("user_id");
-CREATE TABLE IF NOT EXISTS "transactions" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "status" integer, "amount" bigint, "receiver_id" integer, "account_id" integer, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_01f020e267"
+CREATE TABLE IF NOT EXISTS "transactions" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "type" varchar, "status" integer, "amount" bigint, "receiver_id" integer, "account_id" integer, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_01f020e267"
 FOREIGN KEY ("account_id")
   REFERENCES "accounts" ("id")
  ON DELETE CASCADE);

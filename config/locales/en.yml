@@ -66,6 +66,8 @@ en:
         balance: 'Balance'
         interest_rate: 'Interest'
         interest_period: 'Interest period'
+      transfer:
+        amount: 'Transfer amount'
     errors:
       messages:
         record_invalid: "%{errors}"
@@ -97,3 +99,8 @@ en:
             interest_period:
               not_a_number: ' is not numeric. Please set day as numeric value.'
               greater_than: ' must be greater than 0'
+        transfer:
+          attributes:
+            amount:
+              not_a_number: ' is not numeric. Please set amount as numeric value.'
+              greater_than: ' must be greater than 0.'
