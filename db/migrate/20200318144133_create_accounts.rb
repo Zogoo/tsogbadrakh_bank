@@ -1,7 +1,7 @@
 class CreateAccounts < ActiveRecord::Migration[6.0]
   def change
     create_table :accounts do |t|
-      t.string :kind
+      t.integer :kind
       t.integer :status, default: 0
       t.string :currency, default: 'usd'
       t.bigint :balance, default: 0

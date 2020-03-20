@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY);
 CREATE TABLE IF NOT EXISTS "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL);
-CREATE TABLE IF NOT EXISTS "branches" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "kind" varchar, "address" varchar, "serial_num" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL);
+CREATE TABLE IF NOT EXISTS "branches" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "kind" integer, "address" varchar, "serial_num" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL);
 CREATE TABLE sqlite_sequence(name,seq);
 CREATE UNIQUE INDEX "index_branches_on_serial_num" ON "branches" ("serial_num");
 CREATE INDEX "index_branches_on_name" ON "branches" ("name");
@@ -17,7 +17,7 @@ CREATE INDEX "index_profiles_on_user_id" ON "profiles" ("user_id");
 CREATE INDEX "index_profiles_on_email" ON "profiles" ("email");
 CREATE INDEX "index_profiles_on_first_name" ON "profiles" ("first_name");
 CREATE INDEX "index_profiles_on_last_name" ON "profiles" ("last_name");
-CREATE TABLE IF NOT EXISTS "accounts" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "kind" varchar, "status" integer DEFAULT 0, "currency" varchar DEFAULT 'usd', "balance" bigint DEFAULT 0, "interest_rate" integer DEFAULT 0, "interest_period" integer DEFAULT 0, "user_id" integer, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_b1e30bebc8"
+CREATE TABLE IF NOT EXISTS "accounts" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "kind" integer, "status" integer DEFAULT 0, "currency" varchar DEFAULT 'usd', "balance" bigint DEFAULT 0, "interest_rate" integer DEFAULT 0, "interest_period" integer DEFAULT 0, "user_id" integer, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_b1e30bebc8"
 FOREIGN KEY ("user_id")
   REFERENCES "users" ("id")
  ON DELETE CASCADE);

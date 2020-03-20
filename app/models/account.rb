@@ -9,11 +9,21 @@ class Account < ApplicationRecord
   enum status: %i[created active blocked suspended disabled deleted]
   enum currency_type: { usd: 'usd', euro: 'eur', yen: 'jpy', pound: 'grp' }
 
-  validates :kind, inclusion: kinds.keys, presence: true
-  validates :interest_rate, numericality: true
-  validates :interest_period, numericality: true
+  validates :kind, inclusion: { in: kinds.keys }, presence: true
+  validates :status, inclusion: { in: statuses.keys }, presence: true
 
-  def float_balance
+  validates :interest_rate, numericality: { greater_than: 0, less_than: 100 }
+  validates :interest_period, numericality: { greater_than: 0 }
+
+  def balance_as_float
     balance.to_f / 100
+  end
+
+  def interest_rate_as_float
+    interest_rate.to_f / 100
+  end
+
+  def interest_period_by_year
+    interest_period.to_f / 365
   end
 end

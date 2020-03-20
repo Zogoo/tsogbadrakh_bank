@@ -38,7 +38,18 @@ en:
       user:
         one: 'Customer'
         others: 'Customers'
+      profile:
+        one: 'Personal information'
+        others: 'Personal information'
+      account:
+        one: 'Account'
+        others: 'Accounts'
     attributes:
+      branch:
+        kind: 'Type'
+        name: 'ID'
+        address: 'Address'
+        serial_num: 'Serial number'
       user:
         uuid: 'Customer ID'
       profile:
@@ -48,6 +59,13 @@ en:
         postal_code: 'Postal code'
         city: 'City'
         address: 'Address'
+      account:
+        kind: 'Account type'
+        status: 'Status'
+        currency: 'Currency'
+        balance: 'Balance'
+        interest_rate: 'Interest'
+        interest_period: 'Interest period'
     errors:
       messages:
         record_invalid: "%{errors}"
@@ -66,3 +84,16 @@ en:
               too_long: 'is too long. Please use up to 200 characters'
             city:
               too_long: 'is too long. Please use up to 150 characters'
+        account:
+          attributes:
+            kind:
+              inclusion: 'is invalid. Please set a savings or checking.'
+            status:
+              inclusion: 'is invalid. Please contact to your manager.'
+            interest_rate:
+              not_a_number: ' is not numeric. Please set numeric rate between 0%-100%'
+              greater_than: ' must be greater than 0%'
+              less_than: ' must be less than 100%'
+            interest_period:
+              not_a_number: ' is not numeric. Please set day as numeric value.'
+              greater_than: ' must be greater than 0'
