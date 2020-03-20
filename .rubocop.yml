@@ -27,6 +27,8 @@ Metrics/LineLength:
   Max: 150
 Style/IfUnlessModifier:
   Enabled: false
+Style/GuardClause:
+  Enabled: false
 Style/Documentation:
   Enabled: false
   Exclude:

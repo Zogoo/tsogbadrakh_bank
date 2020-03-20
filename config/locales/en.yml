@@ -30,6 +30,11 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  bank:
+    errors:
+      invalid_account_status: 'Unable to process account, please check account status.'
+      cannot_transfer_from_savings: 'You cannot transfer money from savings account. Please contact to bank operator'
+      balance_not_enough: 'Balance is not enough to proceed this transfer.'
   activerecord:
     models:
       branch:

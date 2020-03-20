@@ -3,7 +3,7 @@ class CreateExchangeRates < ActiveRecord::Migration[6.0]
     create_table :exchange_rates do |t|
       t.string :from
       t.string :to
-      t.float :rate
+      t.bigint :rate
       t.datetime :added_at
 
       t.timestamps

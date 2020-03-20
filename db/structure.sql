@@ -29,8 +29,7 @@ FOREIGN KEY ("account_id")
 CREATE INDEX "index_transactions_on_account_id" ON "transactions" ("account_id");
 CREATE INDEX "index_transactions_on_receiver_id" ON "transactions" ("receiver_id");
 CREATE TABLE IF NOT EXISTS "exchange_rates" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "from" varchar, "to" varchar, "rate" bigint, "added_at" datetime, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL);
-CREATE INDEX "index_exchange_rates_on_from" ON "exchange_rates" ("from");
-CREATE INDEX "index_exchange_rates_on_to" ON "exchange_rates" ("to");
+CREATE INDEX "index_exchange_rates_on_added_at" ON "exchange_rates" ("added_at");
 INSERT INTO "schema_migrations" (version) VALUES
 ('20200318143235'),
 ('20200318143740'),

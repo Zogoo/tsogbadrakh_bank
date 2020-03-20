@@ -4,16 +4,27 @@ class AccountsController < ApplicationController
   include ErrorHandler
 
   def transfer
-    TransferHandler.transfer(account_from, account_to)
+    sender = Account.find account_from
+    receiver = Account.find account_to
+    transaction = Tranfser.create!(from: sender, to: receiver, amount: transfer_amount)
+    TransferFunds.process(transaction)
   end
 
   def all
+    last_10_tranfer = Transfer.order(created_at: :desc).limit(10)
+    respond_with_json(last_10_tranfer)
   end
 
   def single
+    transfer = Transfer.find_by!(account_id: account_id).order(created_at: :desc)
+    respond_with_json(transfer)
   end
 
   private
+
+  def account_id
+    params.require(:id)
+  end
 
   def account_from
     params.require(:account_from)
@@ -21,5 +32,9 @@ class AccountsController < ApplicationController
 
   def account_to
     params.require(:account_to)
+  end
+
+  def transfer_amount
+    params.require(:transfer_amount)
   end
 end
