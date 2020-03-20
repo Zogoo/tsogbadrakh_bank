@@ -3,14 +3,12 @@ class CreateExchangeRates < ActiveRecord::Migration[6.0]
     create_table :exchange_rates do |t|
       t.string :from
       t.string :to
-      t.bigint :rate
-      t.integer :status
-      t.datetime :current_timestamp
+      t.float :rate
+      t.datetime :added_at
 
       t.timestamps
     end
     
-    add_index :exchange_rates, :from
-    add_index :exchange_rates, :to
+    add_index :exchange_rates, :added_at
   end
 end
