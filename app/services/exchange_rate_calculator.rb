@@ -9,13 +9,14 @@ class ExchangeRateCalculator
     end
 
     converted_amout = if from == rate.currency_from
-                        (amount.to_f * rate.rate) / 100
+                        amount * rate.rate
                       else
-                        amount.to_f / rate.rate
+                        ((amount.to_f / rate.rate) * 100).to_i
                       end
 
-    unless converted_amout.positive?
-      raise Bank::Error::InvalidExchangeRate, I18n.t('bank.errors.too_low_amount', lowest_amount: rate.rate.to_f / 100)
+    # Will not process less than 0.01 amount of money after converted with exchange rate
+    unless converted_amout >= 1
+      raise Bank::Error::InvalidExchangeRate, I18n.t('bank.errors.too_low_amount', lowest_amount: rate.rate.to_f / 100_00)
     end
 
     converted_amout
