@@ -1,16 +1,8 @@
 # frozen_string_literal: true
 
-class AccountsController < ApplicationController
+class TransactionsController < ApplicationController
   include ErrorHandler
   include ResponseHandler
-
-  def transfer
-    sender = Account.find account_from
-    receiver = Account.find account_to
-    transaction = Transfer.create!(account: sender, receiver: receiver, amount: transfer_amount)
-    TransferFunds.process(transaction)
-    respond_with_json(message: t('bank.messages.successfully_transferred'))
-  end
 
   def last
     last_transfers = Transfer.order(created_at: :desc).limit(limit_number)
@@ -22,7 +14,19 @@ class AccountsController < ApplicationController
     respond_with_json(transfer)
   end
 
+  def transfer
+    sender = Account.find account_from
+    receiver = Account.find account_to
+    transaction = Transfer.create!(account: sender, receiver: receiver, amount: transfer_amount)
+    TransferFunds.process(transaction)
+    respond_with_json(message: t('bank.messages.successfully_transferred'))
+  end
+
   private
+
+  def limit_number
+    params.require(:limit_number)
+  end
 
   def account_id
     params.require(:id)
@@ -38,9 +42,5 @@ class AccountsController < ApplicationController
 
   def transfer_amount
     params.require(:transfer_amount)
-  end
-
-  def limit_number
-    params.require(:limit_number)
   end
 end

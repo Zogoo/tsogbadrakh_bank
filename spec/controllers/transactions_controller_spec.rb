@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AccountsController, type: :controller do
+RSpec.describe TransactionsController, type: :controller do
   let!(:exchange_rate) { create(:exchange_rate, :usd_jpy, rate: 118_97, added_at: Time.now) }
   let!(:branch) { create(:branch) }
   let!(:user_tom) { create(:user, branch: branch) }
@@ -209,6 +209,9 @@ RSpec.describe AccountsController, type: :controller do
         expect(response.parsed_body.size).to eq(10)
         expect(response.parsed_body.first).to be_kind_of(Object)
         expect(response.parsed_body.first['amount']).to eq(100)
+        expect(response.parsed_body.second['amount']).to eq(100)
+        expect(response.parsed_body.third['amount']).to eq(100)
+        expect(response.parsed_body.last['amount']).to eq(100)
       end
     end
   end
