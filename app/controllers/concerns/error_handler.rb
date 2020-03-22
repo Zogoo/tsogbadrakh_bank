@@ -5,14 +5,15 @@ module ErrorHandler
   extend ActiveSupport::Concern
   included do
     rescue_from Bank::Error::InvalidTransferRequest, with: :respond_for_invalid_transfer
+    rescue_from Bank::Error::InvalidExchangeRate, with: :respond_for_invalid_transfer
+    rescue_from Bank::Error::FailedInternalProcess, with: :respond_general_error
     rescue_from ActionController::ParameterMissing, with: :respond_paramer_missing
     rescue_from ActiveRecord::RecordNotFound, with: :respond_resource_not_found
-    rescue_from FailedInternalProcess, with: :respond_general_error
-    rescue_from StandardError, with: :respond_general_error
+    # rescue_from StandardError, with: :respond_general_error
 
     private
 
-    def respond_for_invalid_csv(error)
+    def respond_for_invalid_transfer(error)
       render json: { error: error.message }, status: 400
     end
 

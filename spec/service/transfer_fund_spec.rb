@@ -22,8 +22,16 @@ RSpec.describe TransferFunds do
   describe '#validate!' do
     subject { described_class.validate!(transaction) }
 
-    context 'when validate valid transaction data' do
+    context 'when valid transaction data' do
       let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: hanzo_jpy_acc, amount: 200_00) }
+
+      it 'will not raise any error' do
+        expect { subject }.not_to raise_error
+      end
+    end
+
+    context 'when valid transaction data with small amount data' do
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: hanzo_jpy_acc, amount: 1_00) }
 
       it 'will not raise any error' do
         expect { subject }.not_to raise_error
@@ -39,11 +47,20 @@ RSpec.describe TransferFunds do
       end
     end
 
-    context 'when tranfer to same account' do
+    context 'when valid transaction data' do
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: hanzo_jpy_acc, amount: 1_00) }
+
+      it 'will not raise any error' do
+        expect { subject }.not_to raise_error
+      end
+    end
+
+    context "when sender's balance is zero" do
+      let!(:tom_usd_acc) { create(:account, :checking, user: user_tom, currency: 'usd', balance: 0) }
       let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: tom_usd_acc, amount: 200_00) }
       it 'will raise error with specific message' do
         expect { subject }.to raise_error Bank::Error::InvalidTransferRequest,
-                                          I18n.t('bank.errors.same_account_not_allowed')
+                                          I18n.t('bank.errors.balance_not_enough')
       end
     end
 

@@ -2,11 +2,12 @@
 
 class AccountsController < ApplicationController
   include ErrorHandler
+  include ResponseHandler
 
   def transfer
     sender = Account.find account_from
     receiver = Account.find account_to
-    transaction = Tranfser.create!(from: sender, to: receiver, amount: transfer_amount)
+    transaction = Transfer.create!(account: sender, receiver: receiver, amount: transfer_amount)
     TransferFunds.process(transaction)
     respond_with_json(message: t('bank.messages.successfully_transferred'))
   end

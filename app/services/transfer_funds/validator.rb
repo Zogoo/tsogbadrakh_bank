@@ -42,21 +42,11 @@ module TransferFunds
     def balance_enough?(transaction)
       amount = transaction.amount
       sender = transaction.account
-      receiver = transaction.receiver
-      balance = sender.balance
+      sender_balance = sender.balance
 
-      return I18n.t('bank.errors.balance_not_enough') unless balance.positive?
-
-      required_balance = if sender.currency != receiver.currency
-                           ExchangeRateCalculator.calculate(
-                             from: receiver.currency,
-                             to: sender.currency,
-                             amount: amount
-                           )
-                         else
-                           amount
-                         end
-      return I18n.t('bank.errors.balance_not_enough') if balance < required_balance
+      unless sender_balance.positive? && (sender_balance - amount).positive?
+        I18n.t('bank.errors.balance_not_enough')
+      end
     end
   end
 end
