@@ -5,7 +5,7 @@ class TransactionsController < ApplicationController
   include ResponseHandler
 
   def last
-    last_transfers = Transfer.order(created_at: :desc).limit(limit_number)
+    last_transfers = Transfer.order(created_at: :desc).limit(limit_number || 10)
     respond_with_json(last_transfers)
   end
 
@@ -27,7 +27,7 @@ class TransactionsController < ApplicationController
   private
 
   def limit_number
-    params.require(:limit_number)
+    params.dig(:limit_number)
   end
 
   def account_id

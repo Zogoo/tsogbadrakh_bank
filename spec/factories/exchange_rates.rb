@@ -19,5 +19,20 @@ FactoryBot.define do
       currency_from { 'eur' }
       currency_to { 'jpy' }
     end
+
+    trait :usd_cny do
+      currency_from { 'usd' }
+      currency_to { 'cny' }
+    end
+
+    trait :eur_cny do
+      currency_from { 'eur' }
+      currency_to { 'cny' }
+    end
+
+    trait :eur_gbp do
+      currency_from { 'eur' }
+      currency_to { 'gbp' }
+    end
   end
 end

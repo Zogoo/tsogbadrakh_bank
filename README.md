@@ -46,7 +46,40 @@ RDS_PASSWORD=<STRONG PASSWORD>
 - Start rails
 
 ```bash
+  bundle exec rails db:create
+  bundle exec rails db:migrate
   bundle exec rails s
+```
+
+## Development
+
+You can create some test data on your local environment with following command
+
+```bash
+  bundle exec rails db:create
+  bundle exec rails db:migrate
+  bundle exec rails db:seed
+  bundle exec rails s
+```
+
+Then you test with `curl` as like following examples:
+
+Last 10 transaction list
+
+```
+curl localhost:3000/transactions
+```
+
+Or specify limit with 1
+
+```
+curl localhost:3000/transactions?limit_number=1
+```
+
+Do some transfer with `curl`
+
+```
+ curl -X POST -H "Content-Type: application/json" -d '{"account_from":"2", "account_to":"4", "transfer_amount": "100"}' localhost:3000/transactions/transfer
 ```
 
 ## TODO
