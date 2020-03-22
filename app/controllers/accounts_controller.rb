@@ -12,9 +12,9 @@ class AccountsController < ApplicationController
     respond_with_json(message: t('bank.messages.successfully_transferred'))
   end
 
-  def all
-    last_10_tranfer = Transfer.order(created_at: :desc).limit(10)
-    respond_with_json(last_10_tranfer)
+  def last
+    last_transfers = Transfer.order(created_at: :desc).limit(limit_number)
+    respond_with_json(last_transfers)
   end
 
   def single
@@ -38,5 +38,9 @@ class AccountsController < ApplicationController
 
   def transfer_amount
     params.require(:transfer_amount)
+  end
+
+  def limit_number
+    params.require(:limit_number)
   end
 end

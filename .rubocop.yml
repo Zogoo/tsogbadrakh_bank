@@ -38,3 +38,4 @@ Style/Documentation:
 Metrics/BlockLength:
   Exclude:
     - spec/**/*
+    - app/controllers/concerns/error_handler.rb

@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resources :accounts, only: %i[] do
     collection do
       post :transfer
-      get '', action: :all
+      get '', action: :last
       get '/:account_id', action: :single
     end
   end
