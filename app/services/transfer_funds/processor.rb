@@ -11,34 +11,30 @@ module TransferFunds
 
       transfer_amount = if sender.currency != receiver.currency
                           ExchangeRateCalculator.calculate(
-                            from: receiver.currency,
-                            to: sender.currency,
+                            from: sender.currency,
+                            to: receiver.currency,
                             amount: amount
                           )
                         else
                           amount
                         end
-
       # Block accounts
-      sender.account.blocked!
-      receiver.account.blocked!
+      sender.locked!
+      receiver.locked!
 
       ActiveRecord::Base.transaction do
-        sender_balance = sender.balance - transfer_amount
+        sender_balance = sender.balance - amount
         receiver_balance = receiver.balance + transfer_amount
-        sender.account.update!(balance: sender_balance)
-        receiver.account.update!(balance: receiver_balance)
+        sender.update!(balance: sender_balance, lock_state: :unlocked)
+        receiver.update!(balance: receiver_balance, lock_state: :unlocked)
       end
-      # Unblock account
-      sender.account.active!
-      receiver.account.active!
     rescue StandardError => e
       # Leave log
       Rails.logger.error e.message
       Rails.logger.error e.backtrace.join("\n")
       # Unblock for any error
-      sender.account.active!
-      receiver.account.active!
+      sender.unlocked!
+      receiver.unlocked!
       # Re raise error for response
       raise e
     end

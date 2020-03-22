@@ -3,6 +3,7 @@ class CreateAccounts < ActiveRecord::Migration[6.0]
     create_table :accounts do |t|
       t.integer :kind
       t.integer :status, default: 0
+      t.integer :lock_state, default: 0
       t.string :currency, default: 'usd'
       t.bigint :balance, default: 0
       t.integer :interest_rate, default: 0

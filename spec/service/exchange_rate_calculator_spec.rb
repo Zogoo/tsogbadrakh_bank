@@ -13,7 +13,7 @@ RSpec.describe ExchangeRateCalculator do
       end
 
       it 'will return rate' do
-        expect(subject).to eq(usd_jpy.rate * 1_00)
+        expect(subject).to eq(usd_jpy.rate)
       end
     end
 
@@ -49,7 +49,7 @@ RSpec.describe ExchangeRateCalculator do
         expect(subject).to eq(50)
       end
     end
-  
+
     context 'when exchange non supported currency' do
       subject { described_class.calculate(from: 'mnt', to: 'usd', amount: 100_00) }
       it 'will raise error with specific message' do

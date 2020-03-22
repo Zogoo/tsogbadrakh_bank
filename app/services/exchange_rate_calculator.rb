@@ -9,7 +9,7 @@ class ExchangeRateCalculator
     end
 
     converted_amout = if from == rate.currency_from
-                        amount * rate.rate
+                        (amount * rate.rate) / 100
                       else
                         ((amount.to_f / rate.rate) * 100).to_i
                       end

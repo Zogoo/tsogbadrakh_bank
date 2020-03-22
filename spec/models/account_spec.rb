@@ -213,4 +213,21 @@ RSpec.describe Account, type: :model do
       end
     end
   end
+
+  describe 'lock status' do
+    let!(:locked_account) { create(:account, lock_state: :locked) }
+
+    context 'when try to increase balance for locked account' do
+      it 'will not allow any update' do
+        expect { locked_account.update!(balance: 9_999_00) }.to raise_error Bank::Error::FailedInternalProcess,
+                                                                            'This account is locked!. Please unlock first'
+      end
+    end
+
+    context 'when try to increase balance with unlock state' do
+      it 'will not raise any error' do
+        expect { locked_account.update!(balance: 9_999_00, lock_state: :unlocked) }.not_to raise_error
+      end
+    end
+  end
 end

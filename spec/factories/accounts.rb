@@ -4,6 +4,7 @@ FactoryBot.define do
 
     kind { Account.kinds.keys.sample }
     status { :active }
+    lock_state { :unlocked }
     balance { Faker::Number.number(digits: 10) }
     interest_rate { Faker::Number.number(digits: 2) }
     interest_period { Faker::Number.number(digits: 2) }
