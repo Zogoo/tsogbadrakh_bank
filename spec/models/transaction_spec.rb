@@ -8,15 +8,15 @@ RSpec.describe Transaction, type: :model do
     context 'when user do some transaction' do
       before do
         transaction.account.save!
-        transaction.receiver.save!
+        transaction.reciever.save!
       end
 
       it "will associated to sender's accounts" do
         expect(transaction.account).to be_kind_of(Account)
       end
 
-      it "will associated to receiver's account" do
-        expect(transaction.receiver).to be_kind_of(Account)
+      it "will associated to reciever's account" do
+        expect(transaction.reciever).to be_kind_of(Account)
       end
     end
   end

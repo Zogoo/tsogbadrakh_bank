@@ -182,7 +182,7 @@ RSpec.describe TransactionsController, type: :controller do
   end
 
   describe '#last' do
-    context 'when retreive last 10 transaction' do
+    context 'when retrieve last 10 transaction' do
       subject do
         get :last, params: {
           limit_number: 10
@@ -212,6 +212,28 @@ RSpec.describe TransactionsController, type: :controller do
         expect(response.parsed_body.second['amount']).to eq(100)
         expect(response.parsed_body.third['amount']).to eq(100)
         expect(response.parsed_body.last['amount']).to eq(100)
+      end
+    end
+  end
+
+  describe '#single' do
+    context "when retrieve single account's transaction" do
+      let!(:transaction1) { create(:transfer, status: :completed, account: tom_usd_acc) }
+      let!(:transaction2) { create(:transfer, status: :completed, account: tom_usd_acc) }
+
+      subject do
+        get :single, params: {
+          account_id: tom_usd_acc.id
+        }
+      end
+
+      it 'will return all transactions with completed status' do
+        subject
+        expect(response).to be_successful
+        expect(response.parsed_body).to be_kind_of(Array)
+        expect(response.parsed_body.size).to eq(2)
+        expect(response.parsed_body.first['amount']).to eq(transaction2.amount)
+        expect(response.parsed_body.second['amount']).to eq(transaction1.amount)
       end
     end
   end

@@ -3,7 +3,7 @@
 class Account < ApplicationRecord
   belongs_to :user
   has_many :transactions
-  has_many :received_transactions, class_name: :Transaction, foreign_key: :receiver_id
+  has_many :received_transactions, class_name: :Transaction, foreign_key: :reciever_id
 
   enum kind: %i[checking savings]
   enum status: %i[created active blocked suspended disabled deleted]

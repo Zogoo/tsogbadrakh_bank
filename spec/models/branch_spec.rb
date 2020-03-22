@@ -10,7 +10,7 @@ RSpec.describe Branch, type: :model do
       let!(:user) { create(:user, branch: atm) }
       let!(:account_from) { create(:account, user: user) }
       let!(:account_to) { create(:account, user: user) }
-      let!(:transaction) { create(:transaction, account: account_from, receiver: account_to) }
+      let!(:transaction) { create(:transaction, account: account_from, reciever: account_to) }
       it 'user will associate to branch' do
         expect(atm.users.count.positive?).to be_truthy
       end

@@ -6,19 +6,19 @@ module TransferFunds
 
     def process!(transaction)
       sender = transaction.account
-      receiver = transaction.receiver
+      reciever = transaction.reciever
       amount = transaction.amount
 
       # Excpecting READ COMMITTED isolation for sql transaction
       # Block accounts and tansaction
       transaction.processing!
       sender.locked!
-      receiver.locked!
+      reciever.locked!
 
-      transfer_amount = if sender.currency != receiver.currency
+      transfer_amount = if sender.currency != reciever.currency
                           ExchangeRateCalculator.calculate(
                             from: sender.currency,
-                            to: receiver.currency,
+                            to: reciever.currency,
                             amount: amount
                           )
                         else
@@ -27,9 +27,9 @@ module TransferFunds
 
       ActiveRecord::Base.transaction do
         sender_balance = sender.balance - amount
-        receiver_balance = receiver.balance + transfer_amount
+        reciever_balance = reciever.balance + transfer_amount
         sender.update!(balance: sender_balance, lock_state: :unlocked)
-        receiver.update!(balance: receiver_balance, lock_state: :unlocked)
+        reciever.update!(balance: reciever_balance, lock_state: :unlocked)
         transaction.completed!
       end
     rescue StandardError => e
@@ -39,7 +39,7 @@ module TransferFunds
       # Unlock everything when any error raised
       transaction.failed!
       sender.unlocked!
-      receiver.unlocked!
+      reciever.unlocked!
       # Re raise error for response
       raise e
     end

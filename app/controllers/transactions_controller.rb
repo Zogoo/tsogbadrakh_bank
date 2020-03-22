@@ -10,14 +10,16 @@ class TransactionsController < ApplicationController
   end
 
   def single
-    transfer = Transfer.find_by!(account_id: account_id).order(created_at: :desc)
-    respond_with_json(transfer)
+    transfers = Transfer.where(account_id: account_id, status: :completed)
+                        .or(Transfer.where(reciever_id: account_id))
+                        .order(created_at: :desc)
+    respond_with_json(transfers)
   end
 
   def transfer
     sender = Account.find account_from
-    receiver = Account.find account_to
-    transaction = Transfer.create!(account: sender, receiver: receiver, amount: transfer_amount)
+    reciever = Account.find account_to
+    transaction = Transfer.create!(account: sender, reciever: reciever, amount: transfer_amount)
     TransferFunds.process(transaction)
     respond_with_json(message: t('bank.messages.successfully_transferred'))
   end
@@ -29,7 +31,7 @@ class TransactionsController < ApplicationController
   end
 
   def account_id
-    params.require(:id)
+    params.require(:account_id)
   end
 
   def account_from

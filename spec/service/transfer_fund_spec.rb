@@ -23,7 +23,7 @@ RSpec.describe TransferFunds do
     subject { described_class.validate!(transaction) }
 
     context 'when valid transaction data' do
-      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: hanzo_jpy_acc, amount: 200_00) }
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, reciever: hanzo_jpy_acc, amount: 200_00) }
 
       it 'will not raise any error' do
         expect { subject }.not_to raise_error
@@ -31,7 +31,7 @@ RSpec.describe TransferFunds do
     end
 
     context 'when valid transaction data with small amount data' do
-      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: hanzo_jpy_acc, amount: 1_00) }
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, reciever: hanzo_jpy_acc, amount: 1_00) }
 
       it 'will not raise any error' do
         expect { subject }.not_to raise_error
@@ -39,7 +39,7 @@ RSpec.describe TransferFunds do
     end
 
     context 'when transfer money greater than balance' do
-      let!(:transaction) { create(:transfer, account: hanzo_jpy_acc, receiver: tom_usd_acc, amount: 9_999_00) }
+      let!(:transaction) { create(:transfer, account: hanzo_jpy_acc, reciever: tom_usd_acc, amount: 9_999_00) }
 
       it 'will raise error with specific message' do
         expect { subject }.to raise_error Bank::Error::InvalidTransferRequest,
@@ -48,7 +48,7 @@ RSpec.describe TransferFunds do
     end
 
     context 'when valid transaction data' do
-      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: hanzo_jpy_acc, amount: 1_00) }
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, reciever: hanzo_jpy_acc, amount: 1_00) }
 
       it 'will not raise any error' do
         expect { subject }.not_to raise_error
@@ -57,7 +57,7 @@ RSpec.describe TransferFunds do
 
     context "when sender's balance is zero" do
       let!(:tom_usd_acc) { create(:account, :checking, user: user_tom, currency: 'usd', balance: 0) }
-      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: tom_usd_acc, amount: 200_00) }
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, reciever: tom_usd_acc, amount: 200_00) }
       it 'will raise error with specific message' do
         expect { subject }.to raise_error Bank::Error::InvalidTransferRequest,
                                           I18n.t('bank.errors.balance_not_enough')
@@ -65,7 +65,7 @@ RSpec.describe TransferFunds do
     end
 
     context 'when validate transaction with negative amount' do
-      let(:transaction) { create(:transfer, account: tom_usd_acc, receiver: hanzo_jpy_acc, amount: -10) }
+      let(:transaction) { create(:transfer, account: tom_usd_acc, reciever: hanzo_jpy_acc, amount: -10) }
 
       it 'will raise error' do
         expect { subject }.to raise_error ActiveRecord::RecordInvalid
@@ -73,7 +73,7 @@ RSpec.describe TransferFunds do
     end
 
     context 'when validate transaction with savings account' do
-      let!(:transaction) { create(:transfer, account: tom_saving_acc, receiver: hanzo_jpy_acc, amount: 100_00) }
+      let!(:transaction) { create(:transfer, account: tom_saving_acc, reciever: hanzo_jpy_acc, amount: 100_00) }
 
       it 'will raise error' do
         expect { subject }.to raise_error Bank::Error::InvalidTransferRequest,
@@ -82,7 +82,7 @@ RSpec.describe TransferFunds do
     end
 
     context 'when account is not active' do
-      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: hanzo_jpy_acc, amount: 100_00) }
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, reciever: hanzo_jpy_acc, amount: 100_00) }
 
       before do
         tom_usd_acc.suspended!
@@ -95,7 +95,7 @@ RSpec.describe TransferFunds do
     end
 
     context 'when account owner has not active status' do
-      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: hanzo_jpy_acc, amount: 100_00) }
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, reciever: hanzo_jpy_acc, amount: 100_00) }
 
       before do
         user_tom.blocked!
@@ -108,7 +108,7 @@ RSpec.describe TransferFunds do
     end
 
     context 'when account owner has not active status' do
-      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: hanzo_jpy_acc, amount: 100_00) }
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, reciever: hanzo_jpy_acc, amount: 100_00) }
 
       before do
         tom_usd_acc.locked!
@@ -125,7 +125,7 @@ RSpec.describe TransferFunds do
     subject { described_class.process!(transaction) }
 
     context 'when process valid transaction data' do
-      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: hanzo_jpy_acc, amount: 1_00) }
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, reciever: hanzo_jpy_acc, amount: 1_00) }
 
       it 'will not raise any error' do
         expect { subject }.not_to raise_error
@@ -135,7 +135,7 @@ RSpec.describe TransferFunds do
         expect { subject }.to change(transaction, :status).from('created').to('completed')
       end
 
-      it 'receiver user balance will be increased by transfered amount' do
+      it 'reciever user balance will be increased by transfered amount' do
         expect { subject }.to change(hanzo_jpy_acc, :balance).from(100_00).to(100_00 + exchange_rate.rate)
       end
 
@@ -146,9 +146,9 @@ RSpec.describe TransferFunds do
 
     context 'when process transaction with same currency' do
       let!(:tom_2nd_acc) { create(:account, :checking, user: user_tom, currency: 'usd', balance: 1_00) }
-      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: tom_2nd_acc, amount: 1_00) }
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, reciever: tom_2nd_acc, amount: 1_00) }
 
-      it 'receiver user balance will be increased by transaction amount' do
+      it 'reciever user balance will be increased by transaction amount' do
         expect { subject }.to change(tom_2nd_acc, :balance).from(1_00).to(1_00 + transaction.amount)
       end
 
@@ -159,7 +159,7 @@ RSpec.describe TransferFunds do
 
     context 'when process amount with more that 4 floating point' do
       let!(:exchange_rate) { create(:exchange_rate, :usd_jpy, rate: 3_00, added_at: Time.now) }
-      let!(:transaction) { create(:transfer, account: hanzo_jpy_acc, receiver: tom_usd_acc, amount: 100_00) }
+      let!(:transaction) { create(:transfer, account: hanzo_jpy_acc, reciever: tom_usd_acc, amount: 100_00) }
 
       it 'will cut by last 2 digits' do
         expect { subject }.to change(tom_usd_acc, :balance).by(((100_00.to_f / 3_00) * 100).to_i)
@@ -169,7 +169,7 @@ RSpec.describe TransferFunds do
     context 'when error occurs during proccessing of transaction' do
       let(:tom_2nd_acc) { create(:account, :checking, user: user_tom, currency: 'usd', balance: 1_00) }
       let(:tom_3nd_acc) { create(:account, :checking, user: user_tom, currency: 'usd', balance: 1_00) }
-      let(:transaction) { create(:transfer, account: tom_2nd_acc, receiver: tom_3nd_acc, amount: 1_00) }
+      let(:transaction) { create(:transfer, account: tom_2nd_acc, reciever: tom_3nd_acc, amount: 1_00) }
 
       before do
         allow(transaction).to receive(:completed!).and_raise StandardError.new('error')

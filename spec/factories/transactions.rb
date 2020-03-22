@@ -4,7 +4,7 @@ FactoryBot.define do
 
     status { :created }
     amount { Faker::Number.number(digits: 10) }
-    receiver { create(:account) }
+    reciever { create(:account) }
 
     trait :transfer do
       type { Transfer.to_s }

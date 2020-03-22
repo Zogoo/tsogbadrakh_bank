@@ -7,4 +7,10 @@ Rails.application.routes.draw do
       get '/:account_id', action: :single
     end
   end
+
+  resources :accounts,  only: %i[] do
+    collection do
+      get '/:account_id', action: :single
+    end
+  end
 end

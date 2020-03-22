@@ -8,12 +8,12 @@ module TransferFunds
       transaction.save! unless transaction.valid?
 
       sender = transaction.account
-      receiver = transaction.receiver
+      reciever = transaction.reciever
 
       validate_account!(sender)
-      validate_account!(receiver)
+      validate_account!(reciever)
       validate_sender_account!(transaction)
-      validat_relation!(sender, receiver)
+      validat_relation!(sender, reciever)
     end
 
     def validate_account!(account)
@@ -33,8 +33,8 @@ module TransferFunds
       raise InvalidTransferRequest, error if error.present?
     end
 
-    def validat_relation!(sender, receiver)
-      if sender.id == receiver.id
+    def validat_relation!(sender, reciever)
+      if sender.id == reciever.id
         raise InvalidTransferRequest, I18n.t('bank.errors.same_account_not_allowed')
       end
     end
