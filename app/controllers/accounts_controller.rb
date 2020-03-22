@@ -8,6 +8,7 @@ class AccountsController < ApplicationController
     receiver = Account.find account_to
     transaction = Tranfser.create!(from: sender, to: receiver, amount: transfer_amount)
     TransferFunds.process(transaction)
+    respond_with_json(message: t('bank.messages.successfully_transferred'))
   end
 
   def all

@@ -32,6 +32,7 @@
 en:
   bank:
     errors:
+      general: 'We are not able process you request at the moment. Please try again later.'
       invalid_user_status: 'Customer is not active user. Please check user status.'
       invalid_account_status: 'Unable to process account, please check account status.'
       cannot_transfer_from_savings: 'You cannot transfer money from savings account. Please contact to help desk'
@@ -40,6 +41,8 @@ en:
       too_low_amount: 'Please specify greater than %{lowest_amount}.'
       missing_rate: 'We are not supporting %{from} to %{to} exchange. Please contact to help desk.'
       unable_process: 'Account locked by system!'
+    messages:
+      successfully_transferred: 'Your transfer successfully proceeded.'
   activerecord:
     models:
       branch:
