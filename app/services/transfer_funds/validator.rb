@@ -13,6 +13,7 @@ module TransferFunds
       validate_account!(sender)
       validate_account!(receiver)
       validate_sender_account!(transaction)
+      validat_relation!(sender, receiver)
     end
 
     def validate_account!(account)
@@ -30,6 +31,12 @@ module TransferFunds
       error ||= balance_enough?(transaction)
 
       raise InvalidTransferRequest, error if error.present?
+    end
+
+    def validat_relation!(sender, receiver)
+      if sender.id == receiver.id
+        raise InvalidTransferRequest, I18n.t('bank.errors.same_account_not_allowed')
+      end
     end
 
     def balance_enough?(transaction)

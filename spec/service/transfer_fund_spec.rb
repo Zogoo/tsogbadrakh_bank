@@ -39,6 +39,14 @@ RSpec.describe TransferFunds do
       end
     end
 
+    context 'when tranfer to same account' do
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: tom_usd_acc, amount: 200_00) }
+      it 'will raise error with specific message' do
+        expect { subject }.to raise_error Bank::Error::InvalidTransferRequest,
+                                          I18n.t('bank.errors.same_account_not_allowed')
+      end
+    end
+
     context 'when validate transaction with negative amount' do
       let(:transaction) { create(:transfer, account: tom_usd_acc, receiver: hanzo_jpy_acc, amount: -10) }
 
