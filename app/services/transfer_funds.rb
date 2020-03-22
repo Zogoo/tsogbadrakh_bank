@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module TansferFunds
+module TransferFunds
   class << self
-    include TansferFunds::Validator
-    include TansferFunds::Handler
+    include TransferFunds::Validator
+    include TransferFunds::Processor
 
     def process(transaction)
       validate!(transaction)

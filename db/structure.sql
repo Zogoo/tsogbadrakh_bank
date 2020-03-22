@@ -28,7 +28,7 @@ FOREIGN KEY ("account_id")
  ON DELETE CASCADE);
 CREATE INDEX "index_transactions_on_account_id" ON "transactions" ("account_id");
 CREATE INDEX "index_transactions_on_receiver_id" ON "transactions" ("receiver_id");
-CREATE TABLE IF NOT EXISTS "exchange_rates" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "from" varchar, "to" varchar, "rate" bigint, "added_at" datetime, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL);
+CREATE TABLE IF NOT EXISTS "exchange_rates" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "currency_from" varchar, "currency_to" varchar, "rate" bigint, "added_at" datetime, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL);
 CREATE INDEX "index_exchange_rates_on_added_at" ON "exchange_rates" ("added_at");
 INSERT INTO "schema_migrations" (version) VALUES
 ('20200318143235'),

@@ -1,8 +1,8 @@
 class CreateExchangeRates < ActiveRecord::Migration[6.0]
   def change
     create_table :exchange_rates do |t|
-      t.string :from
-      t.string :to
+      t.string :currency_from
+      t.string :currency_to
       t.bigint :rate
       t.datetime :added_at
 

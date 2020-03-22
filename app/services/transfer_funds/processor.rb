@@ -1,16 +1,20 @@
 # frozen_string_literal: true
 
-module TansferFunds
-  class Processor
+module TransferFunds
+  module Processor
     include Bank::Error
 
-    def self.process!(transaction)
+    def process!(transaction)
       sender = transaction.account
       receiver = transaction.receiver
       amount = transaction.amount
 
       transfer_amount = if sender.currency != receiver.currency
-                          ExchangeRateCalculator.call(receiver.currency, sender.currency, amount)
+                          ExchangeRateCalculator.calculate(
+                            from: receiver.currency,
+                            to: sender.currency,
+                            amount: amount
+                          )
                         else
                           amount
                         end

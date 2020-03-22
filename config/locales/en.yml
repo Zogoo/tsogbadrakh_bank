@@ -33,8 +33,10 @@ en:
   bank:
     errors:
       invalid_account_status: 'Unable to process account, please check account status.'
-      cannot_transfer_from_savings: 'You cannot transfer money from savings account. Please contact to bank operator'
+      cannot_transfer_from_savings: 'You cannot transfer money from savings account. Please contact to help desk'
       balance_not_enough: 'Balance is not enough to proceed this transfer.'
+      too_low_amount: 'Please specify greater than %{lowest_amount}.'
+      missing_rate: 'We are not supporting %{from} to %{to} exchange. Please contact to help desk.'
   activerecord:
     models:
       branch:

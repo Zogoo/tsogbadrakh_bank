@@ -7,8 +7,8 @@ RSpec.describe ExchangeRate, type: :model do
     context 'when add new exchange rate' do
       subject do
         ExchangeRate.create(
-          from: 'euro',
-          to: 'yen',
+          currency_from: 'eur',
+          currency_to: 'jpy',
           rate: '118.96',
           added_at: Time.now
         )

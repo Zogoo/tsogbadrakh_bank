@@ -4,5 +4,9 @@ FactoryBot.define do
     kind { Branch.kinds.keys.sample }
     address { Faker::Address.street_address }
     serial_num { SecureRandom.uuid }
+
+    trait :atm do
+      kind { :atm }
+    end
   end
 end
