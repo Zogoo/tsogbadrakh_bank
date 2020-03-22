@@ -140,5 +140,26 @@ RSpec.describe TransferFunds do
         expect { subject }.to change(tom_usd_acc, :balance).by(((100_00.to_f / 3_00) * 100).to_i)
       end
     end
+
+    context 'when error occurs during proccessing of transaction' do
+      let(:tom_2nd_acc) { create(:account, :checking, user: user_tom, currency: 'usd', balance: 1_00) }
+      let(:tom_3nd_acc) { create(:account, :checking, user: user_tom, currency: 'usd', balance: 1_00) }
+      let(:transaction) { create(:transfer, account: tom_2nd_acc, receiver: tom_3nd_acc, amount: 1_00) }
+
+      before do
+        allow(transaction).to receive(:completed!).and_raise StandardError.new('error')
+      end
+
+      it 'will raise error' do
+        expect { subject }.to raise_error StandardError, 'error'
+      end
+
+      it 'will not lock resources' do
+        expect { subject }.to raise_error StandardError, 'error'
+        expect(tom_usd_acc.active?).to be_truthy
+        expect(hanzo_jpy_acc.active?).to be_truthy
+        expect(transaction.failed?).to be_truthy
+      end
+    end
   end
 end
