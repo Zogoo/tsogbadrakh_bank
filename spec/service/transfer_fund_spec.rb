@@ -111,7 +111,20 @@ RSpec.describe TransferFunds do
       end
 
       it 'receiver user balance will be increased by transfered amount' do
-        expect { subject }.to change(hanzo_jpy_acc, :balance).from(100_00).to(100_00 + 110_97)
+        expect { subject }.to change(hanzo_jpy_acc, :balance).from(100_00).to(100_00 + exchange_rate.rate)
+      end
+
+      it 'sender balance will be decreased by transaction amount' do
+        expect { subject }.to change(tom_usd_acc, :balance).from(1_000_00).to(1_000_00 - transaction.amount)
+      end
+    end
+
+    context 'when process transaction with same currency' do
+      let!(:tom_2nd_acc) { create(:account, :checking, user: user_tom, currency: 'usd', balance: 1_00) }
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: tom_2nd_acc, amount: 1_00) }
+
+      it 'receiver user balance will be increased by transaction amount' do
+        expect { subject }.to change(tom_2nd_acc, :balance).from(1_00).to(1_00 + transaction.amount)
       end
 
       it 'sender balance will be decreased by transaction amount' do
