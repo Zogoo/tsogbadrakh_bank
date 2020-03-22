@@ -21,5 +21,11 @@ test:
   database: db/test.sqlite3
 
 production:
-  <<: *default
-  database: db/production.sqlite3
+  adapter: postgresql
+  pool: 60
+  timeout: 300
+  encoding: utf8
+  host: <%= ENV['RDS_HOST'] %>
+  database: <%= ENV['RDS_DATABASE'] %>
+  user: <%= ENV['RDS_USER'] %>
+  password: <%= ENV['RDS_PASSWORD'] %>

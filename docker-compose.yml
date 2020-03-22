@@ -1,13 +1,13 @@
 version: '3'
 
 services:
-  sinatra:
+  rails_app:
     container_name: bank-service
     build:
       context: .
       dockerfile: bank-ruby.dockerfile
     env_file:
-      - env.development
+      - ./docker.env
     volumes:
       - .:/app
       - bundler-cache:/bundler
@@ -27,7 +27,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: root
-      POSTGRES_PASSWORD: Vai7Ob0jjoom4At3Ahth3aec
+      POSTGRES_PASSWORD: dBESGZ1n&ez1!
 
 volumes:
   bundler-cache:
