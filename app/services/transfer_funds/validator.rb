@@ -17,6 +17,7 @@ module TransferFunds
 
     def validate_account!(account)
       error = nil
+      error ||= I18n.t('bank.errors.unable_process') unless account.unlocked?
       error ||= I18n.t('bank.errors.invalid_account_status') unless account.active?
       error ||= I18n.t('bank.errors.invalid_user_status') unless account.user.active?
       raise InvalidTransferRequest, error if error.present?

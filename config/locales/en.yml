@@ -38,6 +38,7 @@ en:
       balance_not_enough: 'Balance is not enough to proceed this transfer.'
       too_low_amount: 'Please specify greater than %{lowest_amount}.'
       missing_rate: 'We are not supporting %{from} to %{to} exchange. Please contact to help desk.'
+      unable_process: 'Account locked by system!'
   activerecord:
     models:
       branch:

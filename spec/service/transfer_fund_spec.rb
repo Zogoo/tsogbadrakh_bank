@@ -30,6 +30,15 @@ RSpec.describe TransferFunds do
       end
     end
 
+    context 'when transfer money greater than balance' do
+      let!(:transaction) { create(:transfer, account: hanzo_jpy_acc, receiver: tom_usd_acc, amount: 9_999_00) }
+
+      it 'will raise error with specific message' do
+        expect { subject }.to raise_error Bank::Error::InvalidTransferRequest,
+                                          I18n.t('bank.errors.balance_not_enough')
+      end
+    end
+
     context 'when validate transaction with negative amount' do
       let(:transaction) { create(:transfer, account: tom_usd_acc, receiver: hanzo_jpy_acc, amount: -10) }
 
@@ -72,6 +81,19 @@ RSpec.describe TransferFunds do
                                           I18n.t('bank.errors.invalid_user_status')
       end
     end
+
+    context 'when account owner has not active status' do
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: hanzo_jpy_acc, amount: 100_00) }
+
+      before do
+        tom_usd_acc.locked!
+      end
+
+      it 'will raise error' do
+        expect { subject }.to raise_error Bank::Error::InvalidTransferRequest,
+                                          I18n.t('bank.errors.unable_process')
+      end
+    end
   end
 
   describe '#process!' do
@@ -90,6 +112,15 @@ RSpec.describe TransferFunds do
 
       it 'sender balance will be decreased by transaction amount' do
         expect { subject }.to change(tom_usd_acc, :balance).from(1_000_00).to(1_000_00 - transaction.amount)
+      end
+    end
+
+    context 'when process amount with more that 4 floating point' do
+      let!(:exchange_rate) { create(:exchange_rate, :usd_jpy, rate: 3_00, added_at: Time.now) }
+      let!(:transaction) { create(:transfer, account: hanzo_jpy_acc, receiver: tom_usd_acc, amount: 100_00) }
+
+      it 'will cut by last 2 digits' do
+        expect { subject }.to change(tom_usd_acc, :balance).by(((100_00.to_f / 3_00) * 100).to_i)
       end
     end
   end
