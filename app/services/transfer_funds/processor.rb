@@ -9,6 +9,12 @@ module TransferFunds
       receiver = transaction.receiver
       amount = transaction.amount
 
+      # Excpecting READ COMMITTED isolation for sql transaction
+      # Block accounts and tansaction
+      transaction.processing!
+      sender.locked!
+      receiver.locked!
+
       transfer_amount = if sender.currency != receiver.currency
                           ExchangeRateCalculator.calculate(
                             from: sender.currency,
@@ -18,21 +24,20 @@ module TransferFunds
                         else
                           amount
                         end
-      # Block accounts
-      sender.locked!
-      receiver.locked!
 
       ActiveRecord::Base.transaction do
         sender_balance = sender.balance - amount
         receiver_balance = receiver.balance + transfer_amount
         sender.update!(balance: sender_balance, lock_state: :unlocked)
         receiver.update!(balance: receiver_balance, lock_state: :unlocked)
+        transaction.completed!
       end
     rescue StandardError => e
-      # Leave log
+      # Leave log for debugging
       Rails.logger.error e.message
       Rails.logger.error e.backtrace.join("\n")
-      # Unblock for any error
+      # Unlock everything when any error raised
+      transaction.failed!
       sender.unlocked!
       receiver.unlocked!
       # Re raise error for response

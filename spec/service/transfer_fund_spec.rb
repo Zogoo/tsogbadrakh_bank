@@ -106,6 +106,10 @@ RSpec.describe TransferFunds do
         expect { subject }.not_to raise_error
       end
 
+      it 'will change transaction status to completed' do
+        expect { subject }.to change(transaction, :status).from('created').to('completed')
+      end
+
       it 'receiver user balance will be increased by transfered amount' do
         expect { subject }.to change(hanzo_jpy_acc, :balance).from(100_00).to(100_00 + 110_97)
       end
