@@ -1,6 +1,6 @@
 # VisableBank app
 
-[![Build Status](https://travis-ci.org/Zogoo/tsogbadrakh_bank.png)](https://travis-ci.org/Zogoo/tsogbadrakh_bank.png)
+[![Build Status](https://travis-ci.com/Zogoo/tsogbadrakh_bank.svg?token=zzoN1RmBn4p1Bc2sPFKC&branch=master)](https://travis-ci.com/Zogoo/tsogbadrakh_bank)
 
 ## Main requirements for this app.
 
