@@ -18,16 +18,15 @@ module TransferFunds
     def validate_account!(account)
       error = nil
       error ||= I18n.t('bank.errors.invalid_account_status') unless account.active?
-      error ||= I18n.t('bank.errors.invalid_account_status') unless account.user.active?
+      error ||= I18n.t('bank.errors.invalid_user_status') unless account.user.active?
       raise InvalidTransferRequest, error if error.present?
     end
 
     def validate_sender_account!(transaction)
       account = transaction.account
       error = nil
-
-      error ||= I18n.t('bank.errors.cannot_transfer_from_savings') unless account.savings?
-      balance_enough?(transaction)
+      error ||= I18n.t('bank.errors.cannot_transfer_from_savings') if account.savings?
+      error ||= balance_enough?(transaction)
 
       raise InvalidTransferRequest, error if error.present?
     end
@@ -37,9 +36,8 @@ module TransferFunds
       sender = transaction.account
       receiver = transaction.receiver
       balance = sender.balance
-      error = nil
 
-      error ||= I18n.t('bank.errors.balance_not_enough') unless balance.positive?
+      return I18n.t('bank.errors.balance_not_enough') unless balance.positive?
 
       required_balance = if sender.currency != receiver.currency
                            ExchangeRateCalculator.calculate(
@@ -50,12 +48,7 @@ module TransferFunds
                          else
                            amount
                          end
-
-      if balance < required_balance
-        error ||= I18n.t('bank.errors.balance_not_enough')
-      end
-
-      raise InvalidTransferRequest, error if error.present?
+      return I18n.t('bank.errors.balance_not_enough') if balance < required_balance
     end
   end
 end

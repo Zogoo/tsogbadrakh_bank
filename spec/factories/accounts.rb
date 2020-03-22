@@ -13,7 +13,7 @@ FactoryBot.define do
     end
   
     trait :checking do
-      kind { :savings }
+      kind { :checking }
     end
   end
 end

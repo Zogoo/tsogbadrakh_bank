@@ -13,15 +13,63 @@ RSpec.describe TransferFunds do
   let!(:bob_saving_acc) { create(:account, :savings, user: user_bob, currency: 'jpy', balance: 1_000_00, interest_rate: 12, interest_period: 3650) }
 
   describe '#validate!' do
+    subject { described_class.validate!(transaction) }
+
     context 'when validate valid transaction data' do
-      let!(:transaction) { create(:transaction, account: tom_usd_acc, receiver: bob_jpy_acc, amount: 200_00) }
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: bob_jpy_acc, amount: 200_00) }
 
       it 'will not raise any error' do
-        expect { described_class.validate!(transaction) }.not_to raise_error
+        expect { subject }.not_to raise_error
+      end
+    end
+
+    context 'when validate transaction with negative amount' do
+      let(:transaction) { create(:transfer, account: tom_usd_acc, receiver: bob_jpy_acc, amount: -10) }
+
+      it 'will raise error' do
+        expect { subject }.to raise_error ActiveRecord::RecordInvalid
+      end
+    end
+
+    context 'when validate transaction with savings account' do
+      let!(:transaction) { create(:transfer, account: tom_saving_acc, receiver: bob_jpy_acc, amount: 100_00) }
+
+      it 'will raise error' do
+        expect { subject }.to raise_error Bank::Error::InvalidTransferRequest,
+                                          I18n.t('bank.errors.cannot_transfer_from_savings')
+      end
+    end
+
+    context 'when account is not active' do
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: bob_jpy_acc, amount: 100_00) }
+
+      before do
+        tom_usd_acc.suspended!
+      end
+
+      it 'will raise error' do
+        expect { subject }.to raise_error Bank::Error::InvalidTransferRequest,
+                                          I18n.t('bank.errors.invalid_account_status')
+      end
+    end
+
+    context 'when account owner has not active status' do
+      let!(:transaction) { create(:transfer, account: tom_usd_acc, receiver: bob_jpy_acc, amount: 100_00) }
+
+      before do
+        user_tom.blocked!
+      end
+
+      it 'will raise error' do
+        expect { subject }.to raise_error Bank::Error::InvalidTransferRequest,
+                                          I18n.t('bank.errors.invalid_user_status')
       end
     end
   end
 
   describe '#process' do
+    context 'when process valid transaction' do
+
+    end
   end
 end

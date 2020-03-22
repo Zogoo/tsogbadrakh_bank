@@ -32,6 +32,7 @@
 en:
   bank:
     errors:
+      invalid_user_status: 'Customer is not active user. Please check user status.'
       invalid_account_status: 'Unable to process account, please check account status.'
       cannot_transfer_from_savings: 'You cannot transfer money from savings account. Please contact to help desk'
       balance_not_enough: 'Balance is not enough to proceed this transfer.'
